@@ -21,8 +21,22 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
-		String test = session.selectOne("mini.test");
-		System.out.println(test);
 		return "home";
+	}
+	
+	@RequestMapping("/login")
+	public String login() {
+		return "login";
+	}
+	
+	@RequestMapping("/signUpView")
+	public String signUpView() {
+		return "signUp";
+	}
+	
+	@RequestMapping("/signUp")
+	public String signUp() {
+		
+		return "redirect:/login";
 	}
 }
