@@ -2,22 +2,16 @@ package com.mini2.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -71,29 +65,38 @@ public class HomeController {
 
 	@RequestMapping(value = "/idTest", method = RequestMethod.POST)
 	public String idTest(HttpServletRequest req, HttpServletResponse res) {
-		String msg = "";
-		String id2 = req.getParameter("id2");
-		
-		SignUpBean subList = (SignUpBean)session.selectList("mini.idCheck", id2);
-		
-		if(subList.getId().equals("")) {
-			System.out.println(1);
-		} else {
-			System.out.println(2);
-		}
-//			for(int i = 0 ; i < subList.size(); i++) {
-//				System.out.println(subList.get(i).getId());
-//				if(subList.get(i).getId().equals(id2)) {
-//					System.out.println("DB:" + subList.get(i).getId());
-//					System.out.println("입력한 ID" + id2);
-//					msg = "아이디 중복";
+			String msg = "";
+			String id2 = req.getParameter("id2");
+//			try {
+//				res.setContentType("text/html; charset=UTF-8");
+//				PrintWriter out;
+//				out = res.getWriter();
+//				
+//				List<SignUpBean> subList = session.selectList("mini.idCheck", id2);
+//			
+//				if(subList.isEmpty()) {
+//					msg = "사용 가능한 ID입니다.";
+//					req.setAttribute("id2", id2);
+//					out.println("<script>alert('사용 가능한 ID입니다.');</script>");
 //				} else {
-//					System.out.println("DB:" + subList.get(i).getId());
-//					System.out.println("입력한 ID" +id2);
-//					msg = "사용 가능";
+//					out.println("<script>alert('중복된 ID입니다.');</script>");
+//					msg = "중복된 ID입니다.";
 //				}
+//				out.flush();
+//				req.setAttribute("msg", msg);
+//			} catch (IOException e) {
+//				e.printStackTrace();
 //			}
-		req.setAttribute("msg", msg);
+			
+			List<SignUpBean> subList = session.selectList("mini.idCheck", id2);
+			
+			if(subList.isEmpty()) {
+				msg = "사용 가능한 ID입니다.";
+				req.setAttribute("id2", id2);
+			} else {
+				msg = "중복된 ID입니다.";
+			}
+			req.setAttribute("msg", msg);
 		return "signUp";
 	}
 	
@@ -101,21 +104,26 @@ public class HomeController {
 	public void login(HttpServletRequest req, HttpServletResponse res, HttpSession hs) {
 		String id = req.getParameter("id");
 		String pw = req.getParameter("pw");
-
-		List<SignUpBean> infoList = session.selectList("mini.login");
+		
+		SignUpBean sub = new SignUpBean();
+		sub.setId(id);
+		sub.setPw(pw);
+		
+		List<SignUpBean> infoList = session.selectList("mini.login", sub);
+		
 		try {
 			res.setContentType("text/html; charset=UTF-8");
 			PrintWriter out;
 			out = res.getWriter();
-			for(int i = 0 ; i < infoList.size(); i++ ) {
-				if(infoList.get(i).getId().equals(id) && infoList.get(i).getPw().equals(pw)) {
-					out.println("<script>alert('로그인 성공'); location.href='/';</script>");
-					hs.setAttribute("id", id);
-				}else {
-					out.println("<script>alert('로그인 실패'); location.href='/loginView'</script>");
-				}
-				out.flush();
+			
+			if(!infoList.isEmpty()) {
+				out.println("<script>alert('로그인 성공'); location.href='/';</script>");
+				hs.setAttribute("id", id);
+			}else{
+				out.println("<script>alert('로그인 실패'); location.href='/loginView'</script>");
 			}
+			
+			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
