@@ -74,9 +74,11 @@ function viewTest(){
 	
 	if(id.value == ""){
 		alert("ID를 입력해주세요.");
+		document.getElementById('id').setAttribute('style','border: 1px solid red');
 		return false;
 	}else if(pw.value == ""){
 		alert("패스워드를 입력해주세요.");
+		document.getElementById('pw').setAttribute('style','border: 1px solid red');
 		return false;
 	}else if(result == 0){
 		alert("아이디 중복체크를 해주세요.");
