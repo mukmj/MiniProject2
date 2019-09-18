@@ -52,6 +52,19 @@
 	    .dis {
 	    	display: none;
 	    }
+	    
+	    .content {
+	    	float: right; 
+	    	width: 600px; 
+	    	background-color: #e8e8e8; 
+	    	text-align: right;
+	    }
+	    
+	    .content button {
+	    	border: 1px solid grey;
+	    	background-color: white; 
+	    	border-radius: 5px;
+	    }
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
@@ -124,7 +137,7 @@
             <li><%=wbList.get(i).getNickname()%></li>
             <div class="dis">
            		<li style="width:600px; background-color: #e8e8e8;"><%=wbList.get(i).getComment()%></li>
-           		<form action="/delete" style="float: left; text-align: right;">
+           		<form action="/delete" class="content">
            			<input type="hidden" name="noPar" value="<%=wbList.get(i).getNo()%>">
            			<button type="submit">삭제</button>
            		</form>
