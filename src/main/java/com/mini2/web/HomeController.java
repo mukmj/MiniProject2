@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -144,6 +146,24 @@ public class HomeController {
 		System.out.println(no);
 		
 		session.update("mini.delete", no);
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/update")
+	public String update(HttpServletRequest req, HttpServletResponse res) {
+		String title = req.getParameter("title");
+		String comment = req.getParameter("comment");
+		String no = req.getParameter("num");
+		
+		WriteBean wb = new WriteBean();
+		wb.setNo(no);
+		wb.setTitle(title);
+		wb.setComment(comment);
+		
+		session.update("mini.update", wb);
+		
+		System.out.println(no +"번" + title + ":" +comment);
 		
 		return "redirect:/";
 	}

@@ -55,15 +55,19 @@
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
+<%
+	List<WriteBean> wbList = (List<WriteBean>) request.getAttribute("wbList");
+%>
 		function writeEven(no){
-			console.log(no);
 			document.getElementById('num').value = no;
 		}
 		
 		$(document).ready(function (){
 			$('.line').click(function(){
 		        var i = $(this).index();  
-
+				console.log(i);
+				document.getElementById('tit').value = document.getElementsByClassName('line')[i - 1].getElementsByTagName('li')[1].textContent;
+				document.getElementById('com').value = document.getElementsByClassName('line')[i - 1].getElementsByClassName('dis')[0].getElementsByTagName('li')[0].textContent;
 				$('.dis').eq(i - 1).toggle();
 			});
 		});
@@ -89,9 +93,6 @@
 </div><br>
 
 <h1>게시판</h1>
-<%
-	List<WriteBean> wbList = (List<WriteBean>) request.getAttribute("wbList");
-%>
    <div>
         <form action="/insert" method="post" onsubmit="return idCheck()">
             <div class="titleBox">
@@ -102,10 +103,9 @@
                 <label>내용</label><br>
                 <textarea name="comment" id="com"></textarea>
             </div>
-            <input type="hidden" id="num">
+            <input type="hidden" id="num" name="num">
             <button type="submit">추가</button>
-            <button type="submit">수정</button>
-            
+            <button type="submit" formaction="/update">수정</button>    
         </form>
     </div><br>
     <div>
