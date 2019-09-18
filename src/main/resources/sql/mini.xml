@@ -15,4 +15,7 @@
 		INSERT INTO signUp (id, pw) VALUES (#{id}, #{pw})
 	</insert>
 	
+	<insert id="insert" parameterType="com.mini2.web.bean.WriteBean">
+		insert INTO `write` (title, `comment`, nickname) VALUES (#{title}, #{comment}, #{nickname})
+	</insert>
 </mapper>
