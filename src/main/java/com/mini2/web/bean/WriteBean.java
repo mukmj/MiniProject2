@@ -1,10 +1,17 @@
 package com.mini2.web.bean;
 
 public class WriteBean {
+	private String no;
 	private String title;
 	private String comment;
 	private String nickname;
 	
+	public String getNo() {
+		return no;
+	}
+	public void setNo(String no) {
+		this.no = no;
+	}
 	public String getTitle() {
 		return title;
 	}

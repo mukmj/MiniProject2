@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@page import="com.mini2.web.bean.WriteBean"%>
+<%@page import="java.util.List"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <html>
 <head>
@@ -44,9 +46,28 @@
 	        float: left;
 	        text-align: center;
 	        padding-top: 3px;
+	        list-style: none;
+	    }
+	    
+	    .dis {
+	    	display: none;
 	    }
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		function writeEven(no){
+			console.log(no);
+			document.getElementById('num').value = no;
+		}
+		
+		$(document).ready(function (){
+			$('.line').click(function(){
+		        var i = $(this).index();  
+
+				$('.dis').eq(i - 1).toggle();
+			});
+		});
+	</script>
 </head>
 <body>
 <div>
@@ -66,7 +87,11 @@
 	}
 %>
 </div><br>
+
 <h1>게시판</h1>
+<%
+	List<WriteBean> wbList = (List<WriteBean>) request.getAttribute("wbList");
+%>
    <div>
         <form action="/insert" method="post" onsubmit="return idCheck()">
             <div class="titleBox">
@@ -77,20 +102,38 @@
                 <label>내용</label><br>
                 <textarea name="comment" id="com"></textarea>
             </div>
+            <input type="hidden" id="num">
             <button type="submit">추가</button>
+            <button type="submit">수정</button>
+            
         </form>
     </div><br>
     <div>
-        <ul style="border-top: 1px solid #c7c7c7; background-color: #ebebeb">
+        <ul style="border-top: 2px solid #c7c7c7; background-color: #ebebeb">
             <li>번호</li>
             <li>제목</li>
             <li>작성자</li>
         </ul>
-        <ul style="clear: both;">
-            <li>1</li>
-            <li>asd</li>
-            <li>작성자1</li>
+<%
+	if(wbList != null){
+		for(int i = wbList.size() - 1 ; i >= 0; i--){
+%>
+        <ul style="clear: both;" class="line" onclick="writeEven(<%=wbList.get(i).getNo()%>)">
+            <li><%=wbList.get(i).getNo()%></li>
+            <li><%=wbList.get(i).getTitle()%></li>
+            <li><%=wbList.get(i).getNickname()%></li>
+            <div class="dis">
+           		<li style="width:600px; background-color: #e8e8e8;"><%=wbList.get(i).getComment()%></li>
+           		<form action="/delete" style="float: left; text-align: right;">
+           			<input type="hidden" name="noPar" value="<%=wbList.get(i).getNo()%>">
+           			<button type="submit">삭제</button>
+           		</form>
+            </div>
         </ul>
+<%
+		}
+	}
+%>
     </div>
 </body>
 	<script>
@@ -110,11 +153,12 @@
 			alert("작성 완료!");
 			
 			if(document.getElementById('tit').value == ""){
-				
+				alert("제목을 입력해주세요.");
+				return false;
 			}else if(document.getElementById('com').value == ""){
-				
+				alert("내용을 입력해주세요.");
+				return false;
 			}
-			
 		}
 	</script>
 </html>

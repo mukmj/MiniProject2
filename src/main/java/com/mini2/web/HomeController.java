@@ -37,6 +37,10 @@ public class HomeController {
 			System.out.println("null임");
 		}
 		
+		List<WriteBean> wbList = session.selectList("mini.select");
+		
+		req.setAttribute("wbList", wbList);
+		
 		return "home";
 	}
 	
@@ -134,4 +138,13 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping("/delete")
+	public String delete(HttpServletRequest req) {
+		String no = req.getParameter("noPar");
+		System.out.println(no);
+		
+		session.update("mini.delete", no);
+		
+		return "redirect:/";
+	}
 }
