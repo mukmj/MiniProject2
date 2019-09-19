@@ -68,27 +68,16 @@
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
-<%
-	List<WriteBean> wbList = (List<WriteBean>) request.getAttribute("wbList");
-%>
 		function writeEven(no){
 			document.getElementById('num').value = no;
 		}
-		
-		$(document).ready(function (){
-			$('.line').click(function(){
-		        var i = $(this).index();  
-				console.log(i);
-				document.getElementById('tit').value = document.getElementsByClassName('line')[i - 1].getElementsByTagName('li')[1].textContent;
-				document.getElementById('com').value = document.getElementsByClassName('line')[i - 1].getElementsByClassName('dis')[0].getElementsByTagName('li')[0].textContent;
-				$('.dis').eq(i - 1).toggle();
-			});
-		});
 	</script>
 </head>
 <body>
 <div>
 <%
+	List<WriteBean> wbList = (List<WriteBean>) request.getAttribute("wbList");
+	String writer = (String)request.getAttribute("nickname");
 	String id = (String)request.getAttribute("id");
 	
 	if(id == null || id.equals("")){
@@ -117,8 +106,8 @@
                 <textarea name="comment" id="com"></textarea>
             </div>
             <input type="hidden" id="num" name="num">
-            <button type="submit">추가</button>
-            <button type="submit" formaction="/update">수정</button>    
+            <button type="submit" id="insertButt">추가</button>
+            <button type="submit" formaction="/update" id="updateButt">수정</button> 
         </form>
     </div><br>
     <div>
@@ -150,29 +139,60 @@
     </div>
 </body>
 	<script>
+		var nickname = "<%=id%>";
+		
 		function main(){
 			location.href = "/loginView";
 		}
 		
 		function idCheck(){
-			var nickname = "<%=id%>";
-			
 			if(nickname == "null"){
 				alert("로그인 해주세요. 로그인 창으로 넘어갑니다.");
 				location.href = "/loginView";
 				return false;
-			}
-				
-			alert("작성 완료!");
-			
-			if(document.getElementById('tit').value == ""){
+			}else if(document.getElementById('tit').value == ""){
 				alert("제목을 입력해주세요.");
 				return false;
 			}else if(document.getElementById('com').value == ""){
 				alert("내용을 입력해주세요.");
 				return false;
+			}else{
+				alert("작성 완료!");
 			}
 		}
+		
+		$(document).ready(function (){
+			var count = 0;
+			var i;
+
+			$('#updateButt').hide();
+			
+			$('.line').click(function(){
+				i = $(this).index();
+				
+				count++;
+				
+				var writer = document.getElementsByClassName('line')[i - 1].getElementsByTagName('li')[2].textContent;
+
+				if(writer == nickname){
+					$('#updateButt').show();	
+				}else{
+					$('#updateButt').hide();
+				}
+				
+				$('#insertButt').hide();
+				
+				if(count % 2 == 0){
+					document.getElementById('tit').value = "";
+					document.getElementById('com').value = "";
+				}else{
+					document.getElementById('tit').value = document.getElementsByClassName('line')[i - 1].getElementsByTagName('li')[1].textContent;
+					document.getElementById('com').value = document.getElementsByClassName('line')[i - 1].getElementsByClassName('dis')[0].getElementsByTagName('li')[0].textContent;
+				}
+				
+				$('.dis').eq(i - 1).toggle();
+			});
+		});
 	</script>
 </html>
 </body>
