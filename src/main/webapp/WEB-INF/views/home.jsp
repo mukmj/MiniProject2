@@ -60,11 +60,23 @@
 	    	text-align: right;
 	    }
 	    
-	    .content button {
-	    	border: 1px solid grey;
-	    	background-color: white; 
+	    .deleteButt, #insertButt, #updateButt {
+	    	border: 1px solid #b2b2b2;
 	    	border-radius: 5px;
+	    	cursor: pointer;
 	    }
+	    
+	    .deleteButt:hover, #insertButt:hover, #updateButt:hover {
+	    	box-shadow: 2px 2px #b2b2b2;
+	    }
+	    
+	    .deleteButt {
+	    	background-color: white;
+	    }
+	    
+	     #insertButt, #updateButt {
+	     	background-color: #f4f4f4; 
+	     }
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
@@ -128,7 +140,7 @@
            		<li style="width:600px; background-color: #e8e8e8;"><%=wbList.get(i).getComment()%></li>
            		<form action="/delete" class="content">
            			<input type="hidden" name="noPar" value="<%=wbList.get(i).getNo()%>">
-           			<button type="submit">삭제</button>
+           			<button type="submit" class="deleteButt">삭제</button>
            		</form>
             </div>
         </ul>
@@ -140,7 +152,7 @@
 </body>
 	<script>
 		var nickname = "<%=id%>";
-		
+
 		function main(){
 			location.href = "/loginView";
 		}
@@ -151,9 +163,12 @@
 				location.href = "/loginView";
 				return false;
 			}else if(document.getElementById('tit').value == ""){
+				document.getElementById('tit').setAttribute('style','border: 2px solid #0056a2');
 				alert("제목을 입력해주세요.");
 				return false;
 			}else if(document.getElementById('com').value == ""){
+				document.getElementById('tit').setAttribute('style','border: 1px solid #b7b7b7');
+				document.getElementById('com').setAttribute('style','border: 2px solid #0056a2');
 				alert("내용을 입력해주세요.");
 				return false;
 			}else{
@@ -165,25 +180,45 @@
 			var count = 0;
 			var i;
 			var t;
+			
+			if(nickname == "null"){
+				$('#tit').attr('readonly','readonly');
+				$('#com').attr('readonly','readonly');
+				console.log("닉넴다름1");
+			}
+			
 			$('#updateButt').hide();
+			$('#asd').hide();
 			
 			$('.line').click(function(){
 				t = i;
 				i = $(this).index();
 				
-				count++;
-				
 				var writer = document.getElementsByClassName('line')[i - 1].getElementsByTagName('li')[2].textContent;
-
+				var deleteButt = document.getElementsByClassName('deleteButt')[i - 1];
 				if(writer == nickname){
-					$('#updateButt').show();	
+					$('#updateButt').show();
+					$('#tit').removeAttr('readonly','readonly');
+					$('#com').removeAttr('readonly','readonly');
 				}else{
 					$('#updateButt').hide();
+					$(deleteButt).attr('style','display: none');
+					$('#tit').attr('readonly','readonly');
+					$('#com').attr('readonly','readonly');
+					console.log("닉넴다름2");
 				}
 				
 				$('#insertButt').hide();
 				
-				if(count % 2 == 0){
+				if(i != t) {
+					$('.dis').eq(t - 1).hide();
+					count = 0;
+				}else{
+					count++;
+					console.log(i+ "번째: " + count);
+				}
+
+				if(count % 2 == 1){
 					document.getElementById('tit').value = "";
 					document.getElementById('com').value = "";
 				}else{
@@ -192,9 +227,8 @@
 				}
 				
 				$('.dis').eq(i - 1).toggle();
-				console.log(t + "/" + i);
+				//console.log(t + "/" + i);
 			});
-			
 		});
 	</script>
 </html>
