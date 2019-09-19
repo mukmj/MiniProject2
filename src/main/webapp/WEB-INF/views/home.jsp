@@ -164,10 +164,11 @@
 		$(document).ready(function (){
 			var count = 0;
 			var i;
-
+			var t;
 			$('#updateButt').hide();
 			
 			$('.line').click(function(){
+				t = i;
 				i = $(this).index();
 				
 				count++;
@@ -191,7 +192,9 @@
 				}
 				
 				$('.dis').eq(i - 1).toggle();
+				console.log(t + "/" + i);
 			});
+			
 		});
 	</script>
 </html>
