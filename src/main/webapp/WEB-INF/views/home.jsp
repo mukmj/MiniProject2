@@ -221,6 +221,8 @@
 				if(count % 2 == 1){
 					document.getElementById('tit').value = "";
 					document.getElementById('com').value = "";
+					$('#insertButt').show();
+					$('#updateButt').hide();
 				}else{
 					document.getElementById('tit').value = document.getElementsByClassName('line')[i - 1].getElementsByTagName('li')[1].textContent;
 					document.getElementById('com').value = document.getElementsByClassName('line')[i - 1].getElementsByClassName('dis')[0].getElementsByTagName('li')[0].textContent;

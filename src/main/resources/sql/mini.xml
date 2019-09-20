@@ -15,10 +15,6 @@
 		SELECT `no`, title, `comment`, nickname FROM `write` WHERE delYn = 'N'
 	</select>
 	
-	<select id="updateList" resultType="com.mini2.web.bean.WriteBean" parameterType="Integer">
-		SELECT title, `comment`, nickname FROM `write` WHERE `no` = #{no}
-	</select>
-	
 	<insert id="signUp" parameterType="com.mini2.web.bean.SignUpBean">
 		INSERT INTO signUp (id, pw) VALUES (#{id}, #{pw})
 	</insert>
