@@ -184,7 +184,6 @@
 			if(nickname == "null"){
 				$('#tit').attr('readonly','readonly');
 				$('#com').attr('readonly','readonly');
-				console.log("닉넴다름1");
 			}
 			
 			$('#updateButt').hide();
@@ -205,7 +204,6 @@
 					$(deleteButt).attr('style','display: none');
 					$('#tit').attr('readonly','readonly');
 					$('#com').attr('readonly','readonly');
-					console.log("닉넴다름2");
 				}
 				
 				$('#insertButt').hide();
@@ -215,7 +213,6 @@
 					count = 0;
 				}else{
 					count++;
-					console.log(i+ "번째: " + count);
 				}
 
 				if(count % 2 == 1){

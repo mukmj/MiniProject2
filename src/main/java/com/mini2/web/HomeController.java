@@ -74,13 +74,17 @@ public class HomeController {
 			String msg = "";
 			String id2 = req.getParameter("id2");
 			
-			List<SignUpBean> subList = session.selectList("mini.idCheck", id2);
-			
-			if(subList.isEmpty()) {
-				msg = "사용 가능한 ID입니다.";
-				req.setAttribute("id2", id2);
-			} else {
-				msg = "중복된 ID입니다.";
+			if(id2.equals("") || id2 == null) {
+				msg = "아이디를 입력해주세요.";
+			}else {
+				List<SignUpBean> subList = session.selectList("mini.idCheck", id2);
+				
+				if(subList.isEmpty()) {
+					msg = "사용 가능한 ID입니다.";
+					req.setAttribute("id2", id2);
+				} else {
+					msg = "중복된 ID입니다.";
+				}
 			}
 			req.setAttribute("msg", msg);
 		return "signUp";
